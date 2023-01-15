@@ -70,6 +70,17 @@ function createPiece(type) {
   }
 }
 
+const colors = [
+  null,
+  '#0341AE',
+  '#72CB3B',
+  '#FFD500',
+  '#FF971C',
+  '#FF3213',
+  '#FFFFFF',
+  '#CC33CC',
+];
+
 function draw(){
   context.fillStyle = '#000';
   context.fillRect(0, 0, canvas.width, canvas.height);
@@ -82,7 +93,7 @@ function drawPiece(matrix, offset){
   matrix.forEach((row,y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
-          context.fillStyle = 'red';
+          context.fillStyle = colors[value];
           context.fillRect(x + offset.x, 
                            y + offset.y,
                            1, 1);
@@ -105,7 +116,8 @@ function merge(arena, player) {
 
 const player = {
   pos: {x: 0, y: 0},
-  piece: createPiece('O')
+  piece: null,
+  score: 0, 
 };
 
 function playerDrop(){
@@ -114,6 +126,8 @@ function playerDrop(){
       player.pos.y--;
       merge(arena, player);
       playerReset();
+      arenaSweep();
+      updateScore();
     }
     dropCounter = 0
 }
@@ -148,6 +162,8 @@ function playerReset() {
 
   if (collidePiece(arena, player)) {
     arena.forEach(row => row.fill(0));
+    player.score = 0;
+    updateScore();
   }
 }
 
@@ -183,6 +199,27 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
+function arenaSweep() {
+  let rowCount = 1;
+  outer: for (let y = arena.length - 1; y > 0; --y) {
+    for (let x = 0; x < arena[y].length; ++x) {
+      if (arena[y][x] === 0) {
+        continue outer;
+      }
+    } 
+    const row = arena.splice(y, 1)[0].fill(0);
+    arena.unshift(row);
+    ++y;
+
+    player.score += rowCount * 10;
+    rowCount *= 2;
+  }
+}
+
+function updateScore() {
+  document.getElementById('score').innerText = player.score;
+}
+
 document.addEventListener('keydown', event => {
   if (event.key == "ArrowLeft") {
     playerMove(-1);
@@ -195,5 +232,7 @@ document.addEventListener('keydown', event => {
   }
 });
 
+playerReset();
+updateScore();
 update();
     
