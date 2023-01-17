@@ -4,8 +4,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="score"></div>
-    <canvas id="tetris" width="240" height="400" />
+    <div class="canvas">
+        <div class="move">
+            <img src="img/keys.png" alt="move-keys">
+            <p>Move the block</p>
+        </div>
+        <div class="game">
+            <div id="score"></div>
+            <canvas id="tetris" width="240" height="400" />
+        </div>
+        <div class="rotate">
+            <img src="img/spacebar.png" alt="spacebar">
+            <p>Rotate the block</p>
+        </div>
+    </div>
+    
     <script src="tetris.js"></script>
 </body>
 </html>

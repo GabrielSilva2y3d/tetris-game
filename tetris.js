@@ -202,8 +202,8 @@ function update(time = 0) {
 function arenaSweep() {
   let rowCount = 1;
   outer: for (let y = arena.length - 1; y > 0; --y) {
-    for (let x = 0; x < arena[y].length; ++x) {
-      if (arena[y][x] === 0) {
+    for (const element of arena[y]) {
+      if (element === 0) {
         continue outer;
       }
     } 
@@ -217,15 +217,15 @@ function arenaSweep() {
 }
 
 function updateScore() {
-  document.getElementById('score').innerText = player.score;
+  document.getElementById('score').innerText = 'Score: ' + player.score;
 }
 
 document.addEventListener('keydown', event => {
-  if (event.key == "ArrowLeft") {
+  if (event.key == "a") {
     playerMove(-1);
-  }else if (event.key == "ArrowRight") {
+  }else if (event.key == "d") {
     playerMove(1);
-  }else if (event.key == "ArrowDown") {
+  }else if (event.key == "s") {
     playerDrop();
   }else if (event.key == " "){
     playerRotate();
